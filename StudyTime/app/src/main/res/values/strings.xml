@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Study Time</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_title">Study Time?</string>
+    <string name="checkbox_showExit">Show Exit Button while Studying</string>
+    <string name="app_subheading">Don\'t let your phone distract you again!</string>
+
+    <color name="background">#12A5F4</color>
+    <color name="textCol">#DFF7FF</color>
+    <color name="dialogBg">#ff0066de</color>
+
+    <string name="title_activity_confirm_exit">ConfirmExit</string>
+
+</resources>

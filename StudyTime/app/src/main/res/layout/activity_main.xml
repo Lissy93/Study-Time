@@ -1,0 +1,189 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity"
+    android:layout_centerInParent="true"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:id="@+id/container_title"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/app_title"
+            android:id="@+id/txtTitle"
+            android:layout_gravity="center_horizontal"
+            android:textSize="54sp"
+            android:textColor="@color/textCol"/>
+
+    </LinearLayout>
+
+    <TableRow
+        android:id="@+id/container_countdown"
+        android:layout_below="@id/container_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="40dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/txtCountDownTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="70sp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:text="00 : 00"
+            android:textColor="@color/textCol"/>
+
+    </TableRow>
+
+
+    <TableRow
+        android:id="@+id/container_timeLabels"
+        android:layout_below="@id/container_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/txtHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="18sp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:text="Hours"
+            android:textColor="@color/textCol"/>
+
+        <TextView
+            android:id="@+id/txtColon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="18sp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="10dp"
+            android:text=":"
+            android:textColor="@color/textCol"/>
+
+        <TextView
+            android:id="@+id/txtMinutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="18sp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:text="Minutes"
+            android:textColor="@color/textCol"/>
+
+    </TableRow>
+
+
+    <TableRow
+        android:id="@+id/container_time"
+        android:layout_below="@id/container_timeLabels"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="20dp">
+
+        <NumberPicker android:id="@+id/numberpicker_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/textCol"/>
+
+        <TextView
+            android:id="@+id/txtColon2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:paddingBottom="5dp"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="10dp"
+            android:gravity="center_vertical|end"
+            android:text=":"
+            android:textColor="@color/textCol"/>
+
+
+        <NumberPicker android:id="@+id/numberpicker_mins"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textColor="@color/textCol"/>
+
+    </TableRow>
+
+    <LinearLayout
+        android:id="@+id/container_startButtons"
+        android:layout_below="@id/container_time"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_showExit"
+            android:id="@+id/chkExit"
+            android:textColor="@color/textCol"
+            android:checked="true"
+            android:visibility="gone"
+            />
+
+        <Button
+            android:text="Start"
+            android:id="@+id/btnStart"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@drawable/start_button"
+            android:textColor="#ffe9f4ff"
+            android:textSize="60sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+        android:id="@+id/btnClose"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25sp"
+        android:background="@drawable/button"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:visibility="gone"/>
+</RelativeLayout>
