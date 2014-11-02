@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Field;
 
 
@@ -41,10 +44,12 @@ public class MainActivity extends Activity {
     NumberPicker npHours;
     NumberPicker npMins;
     TextView txtCountdown;
+    Button btnClose;
+    static LinearLayout container_finished;
+    TextView txtHowToExit;
 
     Context c;
 
-    //todo
     private static final int MY_NOTIFICATION_ID=1;
     private NotificationManager notificationManager;
     private Notification myNotification;
@@ -55,7 +60,19 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        boolean firstrun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("firstrun", true);
+        if (firstrun){
+            new AlertDialog.Builder(this).setTitle("Welcome to Study Time!").setMessage("IMPORTANT: After clicking 'Study' for the first time, you will see a dialog asking you to select a launcher. Choose 'Study Time' and then press 'Always', (the app will not function correctly if this is not done). \n" +
+                    "This won't interfere with the normal use of your phone while the apps not running, and you only need to do it once.").setNeutralButton("OK", null).show();            // Save the state
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("firstrun", false)
+                    .commit();
+        }
+
         c = getApplicationContext();
+
         ts = new TimerSettings(getApplicationContext());
 
         setUpGui();
@@ -65,6 +82,8 @@ public class MainActivity extends Activity {
         if(ts.isTimerRunning()) {
             decrementTime();
         }
+
+
 
     }
 
@@ -81,7 +100,7 @@ public class MainActivity extends Activity {
             }, 60000);
         }
         else{
-            Toast.makeText(getApplicationContext(), "Timer Up! TODO", Toast.LENGTH_SHORT).show();
+            finishedSession();
         }
 
 
@@ -144,16 +163,18 @@ public class MainActivity extends Activity {
         TextView txtMinutes = (TextView) findViewById(R.id.txtMinutes);
         TextView txtColon2 = (TextView) findViewById(R.id.txtColon2);
         txtCountdown = (TextView) findViewById((R.id.txtCountDownTimer));
+        txtHowToExit = (TextView) findViewById(R.id.howToExit);
 
         /* Buttons */
         Button btnStart = (Button) findViewById(R.id.btnStart);
-        final Button btnClose = (Button) findViewById(R.id.btnClose);
+        btnClose = (Button) findViewById(R.id.btnClose);
 
         /* Containers */
         final TableRow contTimeLabels = (TableRow) findViewById(R.id.container_timeLabels);
         final TableRow contTimeSet    = (TableRow) findViewById(R.id.container_time);
         final LinearLayout contStartButtons = (LinearLayout) findViewById(R.id.container_startButtons);
         final TableRow contCountdown = (TableRow) findViewById(R.id.container_countdown);
+        container_finished = (LinearLayout) findViewById(R.id.container_finished);
 
         /* Other components */
         npHours = (NumberPicker) findViewById(R.id.numberpicker_hours);
@@ -181,8 +202,16 @@ public class MainActivity extends Activity {
         npHours.setMinValue(0);
         npHours.setWrapSelectorWheel(true);
         setNumberPickerTextColor(npMins, Color.argb(250, 250, 250, 250));
-        npMins.setMaxValue(59);
+
+        String[] values=new String[6];
+        for(int i=0;i<values.length;i++){
+            values[i]=Integer.toString(i*10);
+        }
+        npMins.setMaxValue(values.length-1);
         npMins.setMinValue(0);
+        npMins.setDisplayedValues(values);
+
+
         npMins.setWrapSelectorWheel(true);
 
 
@@ -211,24 +240,22 @@ public class MainActivity extends Activity {
                     pm.setComponentEnabledSetting(cn2, 3 - dis, PackageManager.DONT_KILL_APP);
 
                     /* Set default launcher */
+                    Toast.makeText(getApplicationContext(), "Select 'Study Time' then press 'Always'", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.addCategory(Intent.CATEGORY_DEFAULT);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(Intent.createChooser(intent, "Set as default to enable Kiosk Mode"));
-//                    startActivityForResult(intent, 1);
+                    startActivity(Intent.createChooser(intent, "Select Study Time to continue"));
+                    startActivityForResult(intent, 1);
 
                     /* Enter study  mode */
                     int totalSeconds = getNumberPickerTime();
-                    if(chkShowExit.isChecked()){
-                        ts.setShowExit(true);
-                    }
-                    else{
-                        ts.setShowExit(false);
-                    }
+                    if(chkShowExit.isChecked()){ ts.setShowExit(true);  }
+                    else{  ts.setShowExit(false); }
+
                     intoStudyMode(contTimeLabels, contTimeSet, contStartButtons, btnClose, contCountdown, getApplicationContext());
                     ts.createTimerSettings(totalSeconds);
-                    txtCountdown.setText(totalSeconds+" Seconds");
+                    txtCountdown.setText("Study Time needs to be set as default first");
 
                 }
             }
@@ -253,7 +280,7 @@ public class MainActivity extends Activity {
 
     public int getNumberPickerTime() {
 
-        return (npHours.getValue() * 3600) +  (npMins.getValue() * 60);
+        return (npHours.getValue() * 3600) +  (npMins.getValue() * 600);
     }
 
     public int getCurrentTime(){
@@ -272,6 +299,7 @@ public class MainActivity extends Activity {
         contTimeLabels.setVisibility(View.GONE);
         contTimeSet.setVisibility(View.GONE);
         contStartButtons.setVisibility(View.GONE);
+        txtHowToExit.setVisibility(View.GONE);
 
         /* Show timer */
         contCountdown.setVisibility(View.VISIBLE);
@@ -281,10 +309,15 @@ public class MainActivity extends Activity {
             btnExit.setVisibility(View.GONE);
         }
 
+        /* Set Text */
         txtCountdown.setText(formatMinutes(ts.getRemainingTime()));
 
         /* Show Notifications */
         showNotification();
+
+        /* Mute Volume */
+        AudioManager audio = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+        audio.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 
 
     }
@@ -292,31 +325,6 @@ public class MainActivity extends Activity {
 
 
     public void showNotification(){
-//        int icon = R.drawable.ic_launcher;
-//        long when = System.currentTimeMillis();
-//        NotificationManager nm=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        PendingIntent  pending=PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-//        Notification notification;
-//        if (Build.VERSION.SDK_INT < 11) {
-//            notification = new Notification(icon, "Studying....", when);
-//            notification.setLatestEventInfo(
-//                    getApplicationContext(),
-//                    "Title",
-//                    "Text",
-//                    pending);
-//        } else {
-//            notification = new Notification.Builder(getApplicationContext())
-//                    .setContentTitle("Studying....")
-//                    .setContentText(
-//                            "Text").setSmallIcon(R.drawable.ic_launcher)
-//                    .setContentIntent(pending).setWhen(when).setAutoCancel(true)
-//                    .build();
-//        }
-//        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-//        nm.notify(0, notification);
-
-
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         myNotification = new Notification(R.drawable.launcher_ico, "Study Mode Enabled", System.currentTimeMillis());
@@ -364,6 +372,16 @@ public class MainActivity extends Activity {
 
     }
 
+
+    /**
+     * Hides and sets to zero the coutdown timer. Shows the set timer controlls.
+     */
+    public void finishedSession(){
+        container_finished.setVisibility(View.VISIBLE);
+        btnClose.setVisibility(View.VISIBLE);
+        AudioManager audio = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
+        audio.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+    }
 
     public String formatMinutes(int t){
         Double dHours =Math.floor((t/60) / 60);

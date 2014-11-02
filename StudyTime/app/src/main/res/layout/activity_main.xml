@@ -170,6 +170,37 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/container_finished"
+        android:layout_below="@id/container_startButtons"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginTop="130dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/session_great"
+            android:id="@+id/txtGreat"
+            android:layout_gravity="center_horizontal"
+            android:textSize="55sp"
+            android:textColor="@color/textCol"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/session_complete"
+            android:id="@+id/txtComplete"
+            android:layout_gravity="center_horizontal"
+            android:textSize="40sp"
+            android:textColor="@color/textCol"/>
+
+    </LinearLayout>
+
 
     <Button
         android:layout_width="match_parent"
@@ -186,4 +217,18 @@
         android:shadowDy="0"
         android:shadowRadius="5"
         android:visibility="gone"/>
-</RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/how_to_exit"
+        android:id="@+id/howToExit"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/textCol"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal" />
+
+ </RelativeLayout>

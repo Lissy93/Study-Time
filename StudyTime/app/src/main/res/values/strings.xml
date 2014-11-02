@@ -7,11 +7,14 @@
     <string name="app_title">Study Time?</string>
     <string name="checkbox_showExit">Show Exit Button while Studying</string>
     <string name="app_subheading">Don\'t let your phone distract you again!</string>
+    <string name="session_complete">Session Complete</string>
+    <string name="session_great">Great!</string>
 
     <color name="background">#12A5F4</color>
     <color name="textCol">#DFF7FF</color>
     <color name="dialogBg">#ff0066de</color>
 
     <string name="title_activity_confirm_exit">ConfirmExit</string>
+    <string name="how_to_exit">Press \'back\' twice to exit</string>
 
 </resources>
