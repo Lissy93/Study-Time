@@ -1,11 +1,14 @@
 <!-- Title + Description -->
-<h1 align="center">📚 Study Time</h1>
+<h1 align="center">Study Time</h1>
 <p align="center">
-  <i>An (Android) app to reduce distraction while your studying</i><br>
+  <i>An app to reduce distraction while your studying</i><br>
   <img width="80" src="https://raw.githubusercontent.com/Lissy93/Study-Time/master/Graphics/hi-res-icon.png" />
 </p>
 
 ### About
+
+Simply set a timer, and choose a selection of non-distracting apps (e.g. calculator, wikipedia, flashcards), and press go.
+
 Written in Java, as a native Android app, it works by temporarily overiding your system launcher, preventing access to any apps that you've marked as distracting, until your designated study time is completed.
 
 Developed by myself and [@joe-sykes](https://github.com/joe-sykes) at the [London DroidCon](https://london.droidcon.com/) hackathon in 2014.
